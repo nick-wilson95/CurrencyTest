@@ -1,0 +1,60 @@
+﻿@page "/"
+@inject CurrencyApiClient currencyApiClient;
+
+<PageTitle>Converter</PageTitle>
+
+<h1>Currency Converter</h1>
+
+@if (currencies == null)
+{
+        <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@request" OnValidSubmit="@Convert">
+        <DataAnnotationsValidator />
+        <ValidationSummary />        
+
+        <label>From:</label>
+        <select @bind="request.FromCurrency">
+            @foreach (var currency in currencies)
+            {
+                <option value="@currency">@currency</option>
+            }
+        </select>
+        &nbsp;
+        <label>To:</label>
+        <select @bind="request.ToCurrency">
+            @foreach (var currency in currencies)
+            {
+                <option value="@currency">@currency</option>
+            }
+        </select>
+        &nbsp;
+        <label>Amount:</label>
+        <InputNumber @bind-Value="request.Amount">Amount</InputNumber>
+        &nbsp;
+        <button type="submit">Convert</button>
+    </EditForm>
+    <br />
+    <p>@(result == null ? "" : $"Result: {result}")</p>
+}
+
+@code {
+    private ConvertCurrencyRequest request = new();
+    private string[]? currencies = null;
+    private decimal? result = null;
+
+    private async Task Convert()
+    {
+        result = null;
+        result = await currencyApiClient.Convert(request);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currencies = await currencyApiClient.GetCurrencies();
+        request.FromCurrency = currencies[0];
+        request.ToCurrency = currencies[1];
+    }
+}

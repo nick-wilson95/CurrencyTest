@@ -21,7 +21,7 @@ public class CurrencyController : ControllerBase
     [HttpPost("convert")]
     public decimal Convert([FromBody] ConvertCurrencyRequest request)
     {
-        var unrounded = currencyService.Convert(request.Amount, request.From, request.To);
-        return decimal.Round(unrounded, 5);
+        var unrounded = currencyService.Convert(request.Amount, request.FromCurrency, request.ToCurrency);
+        return decimal.Round(unrounded, 2);
     }
 }

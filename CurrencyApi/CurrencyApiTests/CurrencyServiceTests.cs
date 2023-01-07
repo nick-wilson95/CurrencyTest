@@ -30,11 +30,11 @@ public class CurrencyServiceTests
     [Property]
     public Property Convert_ReconversionPreservesValue(decimal amount, Currency from, Currency to)
     {
-        var roundedAmount = decimal.Round(amount, 5);
+        var roundedAmount = decimal.Round(amount, 2);
 
         var converted = currencySerivce.Convert(roundedAmount, from, to);
         var unconverted = currencySerivce.Convert(converted, to, from);
 
-        return (decimal.Round(amount, 5) == decimal.Round(unconverted, 5)).ToProperty();
+        return (decimal.Round(amount, 2) == decimal.Round(unconverted, 5)).ToProperty();
     }
 }
