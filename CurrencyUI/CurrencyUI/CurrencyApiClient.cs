@@ -4,12 +4,12 @@ namespace CurrencyUI;
 
 public class CurrencyApiClient
 {
-	private const string URL = "https://localhost:7268"; //Get this from config
     private readonly HttpClient client;
 
-    public CurrencyApiClient()
+    public CurrencyApiClient(IConfiguration config)
 	{
-		client = new HttpClient { BaseAddress = new Uri(URL) };
+        var url = config.GetValue<string>("currencyApiUrl");
+		client = new HttpClient { BaseAddress = new Uri(url) };
 	}
 
     public async Task<string[]> GetCurrencies()
